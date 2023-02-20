@@ -1,0 +1,109 @@
+Progetto RL
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+entity project_reti_logiche is
+	port (
+		i_clk : in std_logic;
+		i_rst : in std_logic;
+		i_start : in std_logic;
+		i_w : in std_logic;
+		o_z0 : out std_logic_vector(7 downto 0);
+		o_z1 : out std_logic_vector(7 downto 0);
+		o_z2 : out std_logic_vector(7 downto 0);
+		o_z3 : out std_logic_vector(7 downto 0);
+		o_done : out std_logic;
+		o_mem_addr : out std_logic_vector(15 downto 0);
+		i_mem_data : in std_logic_vector(7 downto 0);
+		o_mem_we : out std_logic;
+		o_mem_en : out std_logic
+	);
+end project_reti_logiche;
+
+entity per salvare i primi 2 bit della stringa
+concatenandoli alla fine:
+ 
+ entity outReg is 
+	generic(
+		counter: integer := 1;
+		temp1: std_logic;
+		temp2: std_logic;
+		tempOut: std_logic_vector(1 downto 0)
+	);
+	port(
+		i_start: in std_logic;
+		i_rst, i_clk: in std_logic;
+		i_w: in std_logic;
+		out: out std_logic_vector(1 downto 0)
+	);
+ end outReg;
+
+ architecture behavioral of outReg is
+ begin
+	process(i_clk, i_rst)
+	begin
+		if i_rst = '1' then
+			out <= (others => '0');
+			counter <= 1
+		elsif i_clk = '1' and i_clk'event and counter = '1' then
+			temp1 <= i_w;
+			temp2 <= i_w;
+			counter <= counter - 1;
+			out <= (others => '0');
+		elsif i_clk = '1' and i_clk'event and counter = '0' then
+			temp1 <= temp1;
+			temp2 <= i_w;
+			counter <= 2;
+			tempOut <= temp2&temp1;
+			out <= tempOut
+		end if;
+	end process;
+ end behavioral;
+
+fine entity 2 bit
+inizio entity per salvare l'indirizzo
+
+ entity initAddr is
+	generic(
+		counter: integer := 15;
+		tempAddr: std_logic_vector(15 downto 0)
+	);
+	port(
+		i_rst, i_clk, i_start: in std_logic;
+		in: in std_logic;
+		out: out std_logic_vector(15 downto 0)
+	);
+ end initAddr;
+ 
+fine entity per salvare indirizzo
+inizio cacate
+
+ 20 clk
+ lettura: -18clk
+ padding: -1clk
+ 
+ --	come fare il padding --
+	
+  	addr è il vettore dichiarato come output,
+	tempAddr è lo stesso vettore, ma sottoforma di variabile a lunghezza N
+		
+	generic(tempAddr: std_logic_vector(N downto 0))
+	addr: in std_logic_vector(15 downto 0);
+		
+ constant PADDING : std_logic_vector(addr'range) := (others => 0);
+ . . .
+ addr <= PADDING(15 downto tempAddr'length) & tempAddr;
+ -- fine --
+ 
+ fare un conter di 18 per la lettura da addr, per i primi 2 aspetta e non fa 
+ una sega, per i 16 seguenti legge da input, andando a concatenare i dati ricevuti
+ come fatto sopra per i primi 2 bit
+ alla fine ci sarà da usare il comandi di padding segnati sopra per paddare a 16 bit 
+ con zeri il segnale di address
+ 
+ si può anche usare, senza stare a fare padding, un vettore di 16 elementi, 
+ controllando tramite il contatore quando si fermi l'inizializzazione del vettore
+ es: contatore = 7, abbiamo letto 11 bit, 2 di questi di indirizzo di uscita,
+ quindi abbiamo letto 9 bit sull'indirizzo di memoria, ci mancano quindi 7 bit per avere
+ l'indirizzo completo, che aggiungeremo in una botta unica quando start torna giù a zero
+ Si nota una correlazione tra i bit mancanti e la lunghezza del contatore, sono uguali.
