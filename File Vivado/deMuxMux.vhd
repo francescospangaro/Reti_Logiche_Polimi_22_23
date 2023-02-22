@@ -40,6 +40,7 @@ entity deMuxMux is
 		i_out1: out std_logic_vector(7 downto 0);
 		i_out2: out std_logic_vector(7 downto 0);
 		i_out3: out std_logic_vector(7 downto 0);
+		
 		oldOut0: in std_logic_vector(7 downto 0);
 		oldOut1: in std_logic_vector(7 downto 0);
 		oldOut2: in std_logic_vector(7 downto 0);

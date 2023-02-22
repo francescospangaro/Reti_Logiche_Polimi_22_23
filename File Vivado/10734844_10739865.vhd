@@ -50,9 +50,19 @@ entity project_reti_logiche is
 end project_reti_logiche;
 
 architecture Behavioral of project_reti_logiche is
-    --signal
-    --signal
-    component registryUpdater is
+    signal temp_done : std_logic_vector(7 downto 0);
+    signal temp_channel : std_logic_vector(1 downto 0);
+    signal temp_out0 : std_logic_vector(7 downto 0);
+    signal temp_out1 : std_logic_vector(7 downto 0);
+    signal temp_out2 : std_logic_vector(7 downto 0);
+    signal temp_out3 : std_logic_vector(7 downto 0);
+    signal temp_new0 : std_logic_vector(7 downto 0);
+    signal temp_new1 : std_logic_vector(7 downto 0);
+    signal temp_new2 : std_logic_vector(7 downto 0);
+    signal temp_new3 : std_logic_vector(7 downto 0);
+    signal temp_data : std_logic_vector(7 downto 0);
+    signal counter : integer := 20;
+    component deMuxMux is
         port(
             i_clk, i_rst: in std_logic;
             i_mem_data: in std_logic_vector(7 downto 0);
@@ -67,10 +77,11 @@ architecture Behavioral of project_reti_logiche is
             oldOut3: in std_logic_vector(7 downto 0)
         );
     end component;
-    component regz is
+    component registry8bit is
         port(
             i_in1 : in std_logic_vector(7 downto 0);
             i_clk, i_rst : in std_logic;
+            --i_out_done : out std_logic_vector;
             i_out1 : out std_logic_vector(7 downto 0)
         );
     end component;
@@ -90,6 +101,85 @@ architecture Behavioral of project_reti_logiche is
 		);
 	end component;
 begin
-
-
+    o_r : outReg
+        port map(
+            i_start => i_start,
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_w => i_w,
+            i_out1 => temp_channel
+        );
+    o_a : outAddr
+        port map(
+            i_start => i_start,
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_in1 => i_w,
+            i_out1 => o_mem_addr
+        );
+    r_u : deMuxMux
+        port map(
+            i_mem_data => i_mem_data,
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_addr => temp_channel,
+            oldOut0 => temp_out0,
+            oldOut1 => temp_out1,
+            oldOut2 => temp_out2,
+            oldOut3 => temp_out3,
+            i_out0 => temp_new0,
+            i_out1 => temp_new1,
+            i_out2 => temp_new2,
+            i_out3 => temp_new3
+        );
+    reg_0 : registry8bit
+        port map(
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_in1 => temp_new0,
+            i_out1 => temp_out0
+        );
+    reg_1 : registry8bit
+        port map(
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_in1 => temp_new1,
+            i_out1 => temp_out1
+       );
+    reg_2 : registry8bit
+        port map(
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_in1 => temp_new2,
+            i_out1 => temp_out2
+        );
+    reg_3 : registry8bit
+        port map(
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_in1 => temp_new3,
+            i_out1 => temp_out3
+        );
+    process(i_clk, i_rst)
+        begin
+            o_mem_en <= '1';
+            o_mem_we <= '0';
+            temp_done <= (others => '0');
+            if(i_clk = '1' and i_clk'event and counter > 0) then
+                o_z0 <= temp_out0 and temp_done;
+                o_z1 <= temp_out1 and temp_done;
+                o_z2 <= temp_out2 and temp_done;
+                o_z3 <= temp_out3 and temp_done; 
+                counter <= counter - 1;
+                o_done <= '0';
+            elsif(i_clk = '1' and i_clk'event and counter = 0) then
+                temp_done <= (others => '1');
+                o_done <= '1';
+                o_z0 <= temp_out0;
+                o_z1 <= temp_out1;
+                o_z2 <= temp_out2;
+                o_z3 <= temp_out3;
+                counter <= 20;
+            end if;
+    end process;
 end Behavioral;

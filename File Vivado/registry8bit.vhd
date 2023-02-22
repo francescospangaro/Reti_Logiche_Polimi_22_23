@@ -35,18 +35,28 @@ entity registry8bit is
     port(
         i_in1 : in std_logic_vector(7 downto 0);
         i_clk, i_rst : in std_logic;
+        --i_out_done : out std_logic;
         i_out1 : out std_logic_vector(7 downto 0)
     );
 end registry8bit;
 
 architecture Behavioral of registry8bit is
+    signal check : std_logic_vector(7 downto 0);
     begin
     process(i_clk, i_rst)
         begin
             if i_rst = '1' then
                 i_out1 <= (others => '0');
-            elsif i_clk = '1' and i_clk'event then
+                check <= (others => '0');
+                --i_out_done <= '0';
+            elsif i_clk = '1' and i_clk'event and check = i_in1 then
                 i_out1 <= i_in1;
-        end if;
+                check <= i_in1;
+                --i_out_done <= '0';
+            elsif i_clk = '1' and i_clk'event and not (check = i_in1) then
+                i_out1 <= i_in1;
+                check <= i_in1;
+                --i_out_done <= '1';      
+            end if;
     end process;
 end behavioral;

@@ -55,7 +55,7 @@ begin
 				counter <= counter - 1;
 				i_out1 <= (others => '0');
 			elsif i_clk = '1' and i_clk'event and counter < 17 then
-				tempAddr(counter) <= i_in1;
+				tempAddr(16 - counter) <= i_in1;
 				counter <= counter - 1;
 				i_out1 <= (others => '0');
 			end if;
