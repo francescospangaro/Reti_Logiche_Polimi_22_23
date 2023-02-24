@@ -55,8 +55,8 @@ begin
 				counter <= counter - 1;
 				i_out1 <= (others => '0');
 			elsif i_clk = '1' and i_clk'event and counter < 17 then
-				tempAddr(16 - counter) <= i_in1;
-				counter <= counter - 1;
+			    tempAddr <= std_logic_vector(shift_left(unsigned(tempAddr),1));
+			    tempAddr(0) <= i_in1;
 				i_out1 <= (others => '0');
 			end if;
 		elsif i_start = '0' then 
