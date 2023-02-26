@@ -50,8 +50,12 @@ entity project_reti_logiche is
 end project_reti_logiche;
 
 architecture Behavioral of project_reti_logiche is
-    signal temp_done : std_logic_vector(7 downto 0);
+    signal temp_done : std_logic;
     signal temp_channel : std_logic_vector(1 downto 0);
+    signal en_reg : std_logic;
+    signal en_mux : std_logic;
+    signal en_address : std_logic;
+    signal delayedIn : std_logic;
     signal temp_out0 : std_logic_vector(7 downto 0);
     signal temp_out1 : std_logic_vector(7 downto 0);
     signal temp_out2 : std_logic_vector(7 downto 0);
@@ -64,7 +68,7 @@ architecture Behavioral of project_reti_logiche is
     signal counter : integer := 20;
     component deMuxMux is
         port(
-            i_clk, i_rst: in std_logic;
+            i_clk, i_rst, i_en: in std_logic;
             i_mem_data: in std_logic_vector(7 downto 0);
             i_addr: in std_logic_vector(1 downto 0);
             i_out0: out std_logic_vector(7 downto 0);
@@ -85,40 +89,75 @@ architecture Behavioral of project_reti_logiche is
             i_out1 : out std_logic_vector(7 downto 0)
         );
     end component;
+    component controller is 
+        port(
+            i: in std_logic;
+            i_clk: in std_logic;
+            i_rst: in std_logic;
+            oReg: out std_logic;
+            oAddr: out std_logic;
+            oMux: out std_logic;
+            oDone: out std_logic
+        );
+        end component;
     component outAddr is 
 		port(
-			i_rst, i_clk, i_start: in std_logic;
+			i_rst, i_clk, i_en: in std_logic;
 			i_in1: in std_logic;
 			i_out1: out std_logic_vector(15 downto 0)
 		);
 	end component;
+	component delayFF is
+	   port (
+            i_in1 : in std_logic;
+            o_out1 : out std_logic;
+            i_clk, i_rst: in std_logic
+         );
+    end component;
 	component outReg is
 		port(
-			i_start: in std_logic;
-			i_rst, i_clk: in std_logic;
+			i_en, i_rst, i_clk: in std_logic;
 			i_w: in std_logic;
 			i_out1: out std_logic_vector(1 downto 0)
 		);
 	end component;
 begin
-    o_r : outReg
+    ctrl : controller
         port map(
-            i_start => i_start,
+            i => i_start,
             i_rst => i_rst,
             i_clk => i_clk,
-            i_w => i_w,
+            oReg => en_reg,
+            oAddr => en_address,
+            oMux => en_mux,
+            oDone => temp_done            
+        );
+    del : delayFF
+        port map(
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_in1 => i_w,
+            o_out1 => delayedIn
+        );
+    o_r : outReg
+        port map(
+            i_en => en_reg,
+            i_rst => i_rst,
+            i_clk => i_clk,
+            i_w => delayedIn,
             i_out1 => temp_channel
         );
     o_a : outAddr
         port map(
-            i_start => i_start,
+            i_en => en_address,
             i_rst => i_rst,
             i_clk => i_clk,
-            i_in1 => i_w,
+            i_in1 => delayedIn,
             i_out1 => o_mem_addr
         );
     r_u : deMuxMux
         port map(
+            i_en => en_mux,
             i_mem_data => i_mem_data,
             i_rst => i_rst,
             i_clk => i_clk,
@@ -164,22 +203,18 @@ begin
         begin
             o_mem_en <= '1';
             o_mem_we <= '0';
-            temp_done <= (others => '0');
-            if(i_clk = '1' and i_clk'event and counter > 0) then
-                o_z0 <= temp_out0 and temp_done;
-                o_z1 <= temp_out1 and temp_done;
-                o_z2 <= temp_out2 and temp_done;
-                o_z3 <= temp_out3 and temp_done; 
-                counter <= counter - 1;
-                o_done <= '0';
-            elsif(i_clk = '1' and i_clk'event and counter = 0) then
-                temp_done <= (others => '1');
-                o_done <= '1';
-                o_z0 <= temp_out0;
-                o_z1 <= temp_out1;
-                o_z2 <= temp_out2;
-                o_z3 <= temp_out3;
-                counter <= 20;
+                if(temp_done = '0' and i_clk = '1' and i_clk'event) then
+                    o_z0 <= "00000000";
+                    o_z1 <= "00000000";
+                    o_z2 <= "00000000";
+                    o_z3 <= "00000000";
+                    o_done <= '0';
+                elsif temp_done = '1' and i_clk = '1' and i_clk'event then
+                    o_z0 <= temp_out0;
+                    o_z1 <= temp_out1;
+                    o_z2 <= temp_out2;
+                    o_z3 <= temp_out3;
+                    o_done <= '1';
             end if;
     end process;
 end Behavioral;

@@ -33,7 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity outReg is 
 	port(
-		i_start: in std_logic;
+	    i_en: in std_logic;
 		i_rst, i_clk: in std_logic;
 		i_w: in std_logic;
 		i_out1: out std_logic_vector(1 downto 0)
@@ -41,7 +41,7 @@ entity outReg is
  end outReg;
 
  architecture Behavioral of outReg is
-     signal  ctr    : integer := 1;
+     signal  ctr        : integer := 1;
      signal  tempOut    : std_logic_vector(1 downto 0);
  begin
 	process(i_clk, i_rst)
@@ -50,20 +50,20 @@ entity outReg is
 			i_out1 <= (others => '0');
 			ctr <= 1;
 			tempOut <= (others => '0');
-		elsif(i_clk = '1' and i_clk'event and i_start = '0') then
-		     ctr <= 1;
-	    elsif (i_clk = '1' and i_clk'event and i_start = '1') then
-		  if (ctr = 1) then
-		     tempOut(ctr) <= i_w;
-			 ctr <= ctr - 1;
-			 i_out1 <= (others => '0');
-		  elsif (ctr = 0) then
-		     tempOut(ctr) <= i_w;
-			 i_out1 <= tempOut;
-			 ctr <= 2;
-		    end if;
-		 elsif ctr = 2 then
-             i_out1 <= tempOut;
-		end if;
+		elsif(i_clk = '1' and i_clk'event and i_en = '0') then
+		    ctr <= 1;
+	    elsif (i_clk = '1' and i_clk'event and i_en = '1') then
+		    if (ctr = 1) then
+                tempOut(ctr) <= i_w;
+                ctr <= ctr - 1;
+                i_out1 <= (others => '0');
+            elsif (ctr = 0) then
+                tempOut(ctr) <= i_w;
+                i_out1 <= tempOut;
+                ctr <= 2;
+            end if;
+       elsif ctr = 2 then
+           i_out1 <= tempOut;
+      end if;
 	end process;
  end Behavioral;
