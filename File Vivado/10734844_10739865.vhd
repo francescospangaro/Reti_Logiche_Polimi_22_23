@@ -201,7 +201,13 @@ begin
         );
     process(i_clk, i_rst)
         begin
-            o_mem_en <= '1';
+--uncomment the lines if you want the memory enabling to be dynamic
+
+            --if(rising_edge(i_clk) and en_address = '1')then
+                o_mem_en <= '1';
+            --elsif(rising_edge(i_clk) and en_address = '0')then
+               --o_mem_en <= '0';
+            --end if;
             o_mem_we <= '0';
                 if(temp_done = '0' and i_clk = '1' and i_clk'event) then
                     o_z0 <= "00000000";
