@@ -46,7 +46,8 @@ begin
 	begin
         if(i_rst = '1') then
             tempSignal <= '0';
-        elsif(i_clk = '1' and i_clk'event) then
+        end if;
+        if(i_clk = '1' and i_clk'event) then
             o_out1 <= i_in1;
         end if;
     end process;

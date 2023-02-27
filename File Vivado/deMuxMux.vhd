@@ -33,7 +33,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity deMuxMux is
 	port(
-	    i_clk, i_rst, i_en: in std_logic;
+	    i_clk, i_rst: in std_logic;
+	    i_en : in std_logic_vector(2 downto 0);
 		i_mem_data: in std_logic_vector(7 downto 0);
 		i_addr: in std_logic_vector(1 downto 0);
 		i_out0: out std_logic_vector(7 downto 0);
@@ -57,33 +58,36 @@ entity deMuxMux is
 			i_out1 <= (others => '0');
 			i_out2 <= (others => '0');
 			i_out3 <= (others => '0');
-	    elsif i_en = '1' then
-		  if(i_clk = '1' and i_clk'event and i_addr = "00")then
-			 i_out0 <= i_mem_data;
-			 i_out1 <= oldOut1;
-			 i_out2 <= oldOut2;
-			 i_out3 <= oldOut3;
-		  elsif(i_clk = '1' and i_clk'event and i_addr = "01")then
-			 i_out1 <= i_mem_data;
-			 i_out0 <= oldOut0;
-			 i_out2 <= oldOut2;
-			 i_out3 <= oldOut3;
-		  elsif(i_clk = '1' and i_clk'event and i_addr = "10")then
-			 i_out2 <= i_mem_data;
-			 i_out0 <= oldOut0;
-			 i_out1 <= oldOut1;
-			 i_out3 <= oldOut3;
-		  elsif(i_clk = '1' and i_clk'event and i_addr = "11")then
-			 i_out3 <= i_mem_data;
-			 i_out0 <= oldOut0;
-			 i_out1 <= oldOut1;
-			 i_out2 <= oldOut2;
+		end if;
+		if(i_clk = '1' and i_clk'event)then
+	       if i_en = "011" then
+		      if(i_addr = "00")then
+			     i_out0 <= i_mem_data;
+			     i_out1 <= oldOut1;
+			     i_out2 <= oldOut2;
+			     i_out3 <= oldOut3;
+		      elsif(i_addr = "01")then
+			     i_out1 <= i_mem_data;
+			     i_out0 <= oldOut0;
+			     i_out2 <= oldOut2;
+			     i_out3 <= oldOut3;
+		      elsif(i_addr = "10")then
+			     i_out2 <= i_mem_data;
+			     i_out0 <= oldOut0;
+			     i_out1 <= oldOut1;
+			     i_out3 <= oldOut3;
+		      elsif(i_addr = "11")then
+			     i_out3 <= i_mem_data;
+			     i_out0 <= oldOut0;
+			     i_out1 <= oldOut1;
+			     i_out2 <= oldOut2;
+		      end if;
+		  elsif not i_en = "011" then
+		      i_out0 <= oldOut0;
+              i_out1 <= oldOut1;
+              i_out2 <= oldOut2;
+              i_out3 <= oldOut3;
 		  end if;
-		elsif i_en = '0' then
-		     i_out0 <= oldOut0;
-             i_out1 <= oldOut1;
-             i_out2 <= oldOut2;
-             i_out3 <= oldOut3;
 		end if;
 	end process;
 end Behavioral;

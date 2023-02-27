@@ -50,11 +50,8 @@ entity project_reti_logiche is
 end project_reti_logiche;
 
 architecture Behavioral of project_reti_logiche is
-    signal temp_done : std_logic;
     signal temp_channel : std_logic_vector(1 downto 0);
-    signal en_reg : std_logic;
-    signal en_mux : std_logic;
-    signal en_address : std_logic;
+    signal stateDefiner : std_logic_vector(2 downto 0);
     signal delayedIn : std_logic;
     signal temp_out0 : std_logic_vector(7 downto 0);
     signal temp_out1 : std_logic_vector(7 downto 0);
@@ -68,7 +65,8 @@ architecture Behavioral of project_reti_logiche is
     signal counter : integer := 20;
     component deMuxMux is
         port(
-            i_clk, i_rst, i_en: in std_logic;
+            i_clk, i_rst: in std_logic;
+            i_en : in std_logic_vector(2 downto 0);
             i_mem_data: in std_logic_vector(7 downto 0);
             i_addr: in std_logic_vector(1 downto 0);
             i_out0: out std_logic_vector(7 downto 0);
@@ -94,15 +92,13 @@ architecture Behavioral of project_reti_logiche is
             i: in std_logic;
             i_clk: in std_logic;
             i_rst: in std_logic;
-            oReg: out std_logic;
-            oAddr: out std_logic;
-            oMux: out std_logic;
-            oDone: out std_logic
+            outState : out std_logic_vector(2 downto 0)
         );
         end component;
     component outAddr is 
 		port(
-			i_rst, i_clk, i_en: in std_logic;
+			i_rst, i_clk: in std_logic;
+			i_en : in std_logic_vector(2 downto 0);
 			i_in1: in std_logic;
 			i_out1: out std_logic_vector(15 downto 0)
 		);
@@ -116,7 +112,8 @@ architecture Behavioral of project_reti_logiche is
     end component;
 	component outReg is
 		port(
-			i_en, i_rst, i_clk: in std_logic;
+			i_rst, i_clk: in std_logic;
+			i_en : in std_logic_vector(2 downto 0);
 			i_w: in std_logic;
 			i_out1: out std_logic_vector(1 downto 0)
 		);
@@ -127,10 +124,7 @@ begin
             i => i_start,
             i_rst => i_rst,
             i_clk => i_clk,
-            oReg => en_reg,
-            oAddr => en_address,
-            oMux => en_mux,
-            oDone => temp_done            
+            outState => stateDefiner         
         );
     del : delayFF
         port map(
@@ -141,7 +135,7 @@ begin
         );
     o_r : outReg
         port map(
-            i_en => en_reg,
+            i_en => stateDefiner,
             i_rst => i_rst,
             i_clk => i_clk,
             i_w => delayedIn,
@@ -149,7 +143,7 @@ begin
         );
     o_a : outAddr
         port map(
-            i_en => en_address,
+            i_en => stateDefiner,
             i_rst => i_rst,
             i_clk => i_clk,
             i_in1 => delayedIn,
@@ -157,7 +151,7 @@ begin
         );
     r_u : deMuxMux
         port map(
-            i_en => en_mux,
+            i_en => stateDefiner,
             i_mem_data => i_mem_data,
             i_rst => i_rst,
             i_clk => i_clk,
@@ -202,25 +196,28 @@ begin
     process(i_clk, i_rst)
         begin
 --uncomment the lines if you want the memory enabling to be dynamic
-
-            --if(rising_edge(i_clk) and en_address = '1')then
-                o_mem_en <= '1';
-            --elsif(rising_edge(i_clk) and en_address = '0')then
-               --o_mem_en <= '0';
-            --end if;
+            if rising_edge(i_clk) then
+                if(stateDefiner = "010")then
+                    o_mem_en <= '1';
+                else
+                    o_mem_en <= '0';
+                end if;
+            end if;
             o_mem_we <= '0';
-                if(temp_done = '0' and i_clk = '1' and i_clk'event) then
-                    o_z0 <= "00000000";
-                    o_z1 <= "00000000";
-                    o_z2 <= "00000000";
-                    o_z3 <= "00000000";
-                    o_done <= '0';
-                elsif temp_done = '1' and i_clk = '1' and i_clk'event then
+            if rising_edge(i_clk) then
+                if(stateDefiner = "100") then
                     o_z0 <= temp_out0;
                     o_z1 <= temp_out1;
                     o_z2 <= temp_out2;
                     o_z3 <= temp_out3;
                     o_done <= '1';
+                else
+                    o_z0 <= "00000000";
+                    o_z1 <= "00000000";
+                    o_z2 <= "00000000";
+                    o_z3 <= "00000000";
+                    o_done <= '0';
+                end if;
             end if;
     end process;
 end Behavioral;

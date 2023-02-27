@@ -36,15 +36,16 @@ entity controller is
 		i: in std_logic;
 		i_clk: in std_logic;
 		i_rst: in std_logic;
-		oReg: out std_logic;
-		oAddr: out std_logic;
-		oMux: out std_logic;
-		oDone: out std_logic
+		outState: out std_logic_vector(2 downto 0)
+		--oReg: out std_logic;
+		--oAddr: out std_logic;
+		--oMux: out std_logic;
+		--oDone: out std_logic
 	);
 end controller;
 
 architecture FSM of controller is
-	type state_type is (S0, S1, S2, S3, S4, S5, S6, S9, S7, S8, S10);
+	type state_type is (S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10);
 	signal next_state, current_state: state_type;
 
 	begin
@@ -133,60 +134,71 @@ architecture FSM of controller is
 		begin
 			case current_state is
 				when S0 =>
-					oReg <= '0';
-					oAddr <= '0';
-					oMux <= '0';
-					oDone <= '0';
+				    outState <= "000";
+					--oReg <= '0';
+					--oAddr <= '0';
+					--oMux <= '0';
+					--oDone <= '0';
 				when S1 =>
-					oReg <= '1';
-                    oAddr <= '0';
-                    oMux <= '0';
-                    oDone <= '0';
+				    outState <= "001";
+					--oReg <= '1';
+                    --oAddr <= '0';
+                    --oMux <= '0';
+                    --oDone <= '0';
 				when S2 =>
-					oReg <= '1';
-                    oAddr <= '0';
-                    oMux <= '0';
-                    oDone <= '0';
+					outState <= "001";
+                    --oReg <= '1';
+                    --oAddr <= '0';
+                    --oMux <= '0';
+                    --oDone <= '0';
 				when S3 =>
-					oReg <= '0';
-                    oAddr <= '1';
-                    oMux <= '0';
-                    oDone <= '0';
-                when S10 =>
-                    oReg <= '0';
-                    oAddr <= '1';
-                    oMux <= '0';
-                    oDone <= '0';
+					outState <= "010";      
+					--oReg <= '0';
+                    --oAddr <= '1';
+                    --oMux <= '0';
+                    --oDone <= '0';
 				when S4 =>
-					oReg <= '0';
-                    oAddr <= '0';
-                    oMux <= '0';
-                    oDone <= '0';
+					outState <= "000";
+                    --oReg <= '0';
+                    --oAddr <= '0';
+                    --oMux <= '0';
+                    --oDone <= '0';
 				when S5 =>
-					oReg <= '0';
-                    oAddr <= '0';
-                    oMux <= '1';
-                    oDone <= '0';            
+					outState <= "011";
+                    --oReg <= '0';
+                    --oAddr <= '0';
+                    --oMux <= '1';
+                    --oDone <= '0';            
 				when S6 =>
-					oReg <= '0';
-                    oAddr <= '0';
-                    oMux <= '0';
-                    oDone <= '0';
-                when S9 =>
-                    oReg <= '0';
-                    oAddr <= '0';
-                    oMux <= '1';
-                    oDone <= '0';
+					outState <= "000";
+                    --oReg <= '0';
+                    --oAddr <= '0';
+                    --oMux <= '0';
+                    --oDone <= '0';
 				when S7 =>
-					oReg <= '0';
-                    oAddr <= '0';
-                    oMux <= '0';
-                    oDone <= '1';
+				    outState <= "100";
+                    --oReg <= '0';
+                    --oAddr <= '0';
+                    --oMux <= '0';
+                    --oDone <= '1';
 				when S8 =>
-					oReg <= '0';
-                    oAddr <= '0';
-                    oMux <= '0';
-                    oDone <= '0';
+					outState <= "000";
+                    --oReg <= '0';
+                    --oAddr <= '0';
+                    --oMux <= '0';
+                    --oDone <= '0';
+                 when S9 =>
+                    outState <= "011";
+                    --oReg <= '0';
+                    --oAddr <= '0';
+                    --oMux <= '1';
+                    --oDone <= '0';
+                when S10 =>
+                    outState <= "010";      
+                    --oReg <= '0';
+                    --oAddr <= '1';
+                    --oMux <= '0';
+                    --oDone <= '0';
 			end case;
 		end process;
 	end FSM;

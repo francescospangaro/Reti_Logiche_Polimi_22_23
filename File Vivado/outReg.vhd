@@ -33,7 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity outReg is 
 	port(
-	    i_en: in std_logic;
+	    i_en: in std_logic_vector(2 downto 0);
 		i_rst, i_clk: in std_logic;
 		i_w: in std_logic;
 		i_out1: out std_logic_vector(1 downto 0)
@@ -46,24 +46,24 @@ entity outReg is
  begin
 	process(i_clk, i_rst)
 	begin
+	   
 		if (i_rst = '1') then
 			i_out1 <= (others => '0');
 			ctr <= 1;
 			tempOut <= (others => '0');
-		elsif(i_clk = '1' and i_clk'event and i_en = '0') then
-		    ctr <= 1;
-	    elsif (i_clk = '1' and i_clk'event and i_en = '1') then
-		    if (ctr = 1) then
+		end if;
+		if (i_clk = '1' and i_clk'event) then
+		  if not(i_en = "001") then
+		        i_out1 <= tempOut;
+	       elsif (i_en = "001" and ctr = 1) then
                 tempOut(ctr) <= i_w;
                 ctr <= ctr - 1;
                 i_out1 <= (others => '0');
-            elsif (ctr = 0) then
+            elsif (i_en = "001" and ctr = 0) then
                 tempOut(ctr) <= i_w;
                 i_out1 <= tempOut;
-                ctr <= 2;
-            end if;
-       elsif ctr = 2 then
-           i_out1 <= tempOut;
+                ctr <= 1;
+        end if;
       end if;
 	end process;
  end Behavioral;

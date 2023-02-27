@@ -49,14 +49,17 @@ architecture Behavioral of registry8bit is
                 i_out1 <= (others => '0');
                 check <= (others => '0');
                 --i_out_done <= '0';
-            elsif i_clk = '1' and i_clk'event and check = i_in1 then
-                i_out1 <= i_in1;
-                check <= i_in1;
-                --i_out_done <= '0';
-            elsif i_clk = '1' and i_clk'event and not (check = i_in1) then
-                i_out1 <= i_in1;
-                check <= i_in1;
-                --i_out_done <= '1';      
+            end if;
+            if (i_clk = '1' and i_clk'event) then
+                if check = i_in1 then
+                    i_out1 <= i_in1;
+                    check <= i_in1;
+                    --i_out_done <= '0';
+                elsif not (check = i_in1) then
+                    i_out1 <= i_in1;
+                    check <= i_in1;
+                    --i_out_done <= '1';      
+                end if;
             end if;
     end process;
 end behavioral;
