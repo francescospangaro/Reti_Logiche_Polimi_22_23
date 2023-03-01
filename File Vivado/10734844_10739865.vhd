@@ -107,7 +107,7 @@ architecture Behavioral of project_reti_logiche is
 	   port (
             i_in1 : in std_logic;
             o_out1 : out std_logic;
-            i_clk, i_rst: in std_logic
+            i_clk : in std_logic
          );
     end component;
 	component outReg is
@@ -128,7 +128,6 @@ begin
         );
     del : delayFF
         port map(
-            i_rst => i_rst,
             i_clk => i_clk,
             i_in1 => i_w,
             o_out1 => delayedIn
@@ -212,10 +211,10 @@ begin
                     o_z3 <= temp_out3;
                     o_done <= '1';
                 else
-                    o_z0 <= "00000000";
-                    o_z1 <= "00000000";
-                    o_z2 <= "00000000";
-                    o_z3 <= "00000000";
+                    o_z0 <= temp_out0 and "00000000";
+                    o_z1 <= temp_out1 and "00000000";
+                    o_z2 <= temp_out2 and "00000000";
+                    o_z3 <= temp_out3 and "00000000";
                     o_done <= '0';
                 end if;
             end if;
