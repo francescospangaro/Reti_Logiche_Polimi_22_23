@@ -1,8 +1,5 @@
 test bench 1 -> a random test, just to differ from the one given in class
 test bench 2 -> uses multiple resets and 10 different iterations
 test bench 3 -> uses a full address of all ones
-test bench 4 -> uses multiple resents and 100 different iterations (not working)
-test bench 5 -> uses multiple resents and 1000 different iterations (not working)
-
-NB: 4 and 5 aren't working, my guess is that is just an issue of the generator, which uses a rnd number between 0 and 10 to decide what to do 
-in the case of multiple resents, and 0 bugs it out, I guess on 100 and 1000 iterations some zeroes have appeared
+test bench 4 -> uses multiple resents and 100 different iterations
+test bench 5 -> uses multiple resents and 1000 different iterations
