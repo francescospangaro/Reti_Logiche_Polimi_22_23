@@ -107,7 +107,7 @@ architecture Behavioral of project_reti_logiche is
 	   port (
             i_in1 : in std_logic;
             o_out1 : out std_logic;
-            i_clk : in std_logic
+            i_clk, i_rst : in std_logic
          );
     end component;
 	component outReg is
@@ -128,6 +128,7 @@ begin
         );
     del : delayFF
         port map(
+            i_rst => i_rst,
             i_clk => i_clk,
             i_in1 => i_w,
             o_out1 => delayedIn
@@ -196,7 +197,7 @@ begin
         begin
 --uncomment the lines if you want the memory enabling to be dynamic
             if rising_edge(i_clk) then
-                if(stateDefiner = "010")then
+                if(stateDefiner = "010" or stateDefiner = "001")then
                     o_mem_en <= '1';
                 else
                     o_mem_en <= '0';
