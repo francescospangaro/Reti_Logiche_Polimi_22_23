@@ -195,6 +195,12 @@ begin
         );
     process(i_clk, i_rst)
         begin
+           if(i_rst='1') then
+               o_z0 <= (others => '0');
+               o_z1 <= (others => '0');
+               o_z2 <= (others => '0');
+               o_z3 <= (others => '0');
+          end if;
 --uncomment the lines if you want the memory enabling to be dynamic
             if rising_edge(i_clk) then
                 if(stateDefiner = "010" or stateDefiner = "001")then
