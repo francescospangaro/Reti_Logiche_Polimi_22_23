@@ -1,0 +1,64 @@
+1)tb_1
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+2)tb_2
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+3)tb_3
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+4)tb_4
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+5)tb_5
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+6)tb_6
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+7)tb_7
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+8)test_bench_4
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+9)test_bench_5
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Non ho voglia di aspettare 20 minuti
+#Post-Synthesis TIMING simulation > Non ho voglia di aspettare 20 minuti
+
+10)prova1
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Fallito
+#Post-Synthesis TIMING simulation > 
+
+11)multipleResetAfter9Clock
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Fallito
+#Post-Synthesis TIMING simulation > Fallito
+
+12)test_bench_3
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
+
+13)tb_example23_agg
+#BEHAVIOURAL simulation > Passato
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
