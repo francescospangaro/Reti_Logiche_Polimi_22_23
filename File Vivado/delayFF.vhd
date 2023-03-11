@@ -35,14 +35,15 @@ entity delayFF is
     Port (
         i_in1 : in std_logic;
         o_out1 : out std_logic;
-        i_clk, i_rst : in std_logic
+        i_clk : in std_logic; 
+        i_rst : in std_logic
      );
 end delayFF;
 
 architecture Behavioral of delayFF is
     signal tempSignal : std_logic;
 begin
-	process(i_clk)
+	process(i_clk,i_rst)
 	begin
 	    if(i_rst = '1') then
 	       o_out1 <= '0';

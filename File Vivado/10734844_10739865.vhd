@@ -45,7 +45,7 @@ entity project_reti_logiche is
 		o_mem_addr : out std_logic_vector(15 downto 0);
 		i_mem_data : in std_logic_vector(7 downto 0);
 		o_mem_we : out std_logic;
-		o_mem_en : out std_logic
+		o_mem_en : out std_logic := '0'
 	);
 end project_reti_logiche;
 
@@ -202,7 +202,7 @@ begin
                o_z3 <= (others => '0');
           end if;
 --uncomment the lines if you want the memory enabling to be dynamic
-            if rising_edge(i_clk) then
+            if (i_clk = '1' and i_clk'event) then
                 if(stateDefiner = "010" or stateDefiner = "001")then
                     o_mem_en <= '1';
                 else
