@@ -33,19 +33,19 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity deMuxMux is
 	port(
-	    i_clk, i_rst: in std_logic;
-	    i_en : in std_logic_vector(2 downto 0);
-		i_mem_data: in std_logic_vector(7 downto 0);
-		i_addr: in std_logic_vector(1 downto 0);
-		i_out0: out std_logic_vector(7 downto 0);
-		i_out1: out std_logic_vector(7 downto 0);
-		i_out2: out std_logic_vector(7 downto 0);
-		i_out3: out std_logic_vector(7 downto 0);
+	    i_clk, i_rst	: in std_logic;
+	    i_en 			: in std_logic_vector(2 downto 0);
+		i_mem_data		: in std_logic_vector(7 downto 0);
+		i_addr			: in std_logic_vector(1 downto 0);
+		i_out0			: out std_logic_vector(7 downto 0);
+		i_out1			: out std_logic_vector(7 downto 0);
+		i_out2			: out std_logic_vector(7 downto 0);
+		i_out3			: out std_logic_vector(7 downto 0);
 		
-		oldOut0: in std_logic_vector(7 downto 0);
-		oldOut1: in std_logic_vector(7 downto 0);
-		oldOut2: in std_logic_vector(7 downto 0);
-		oldOut3: in std_logic_vector(7 downto 0)
+		oldOut0			: in std_logic_vector(7 downto 0);
+		oldOut1			: in std_logic_vector(7 downto 0);
+		oldOut2			: in std_logic_vector(7 downto 0);
+		oldOut3			: in std_logic_vector(7 downto 0)
 	);
  end deMuxMux;
  

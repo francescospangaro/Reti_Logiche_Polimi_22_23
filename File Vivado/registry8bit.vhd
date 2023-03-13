@@ -33,10 +33,10 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity registry8bit is
     port(
-        i_in1 : in std_logic_vector(7 downto 0);
-        i_clk, i_rst : in std_logic;
+        i_in1 			: in std_logic_vector(7 downto 0);
+        i_clk, i_rst 	: in std_logic;
         --i_out_done : out std_logic;
-        i_out1 : out std_logic_vector(7 downto 0)
+        i_out1 			: out std_logic_vector(7 downto 0)
     );
 end registry8bit;
 

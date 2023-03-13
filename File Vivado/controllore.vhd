@@ -33,9 +33,9 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity controller is
 	port(
-		i: in std_logic;
-		i_clk: in std_logic;
-		i_rst: in std_logic;
+		i		: in std_logic;
+		i_clk	: in std_logic;
+		i_rst	: in std_logic;
 		outState: out std_logic_vector(2 downto 0)
 		--oReg: out std_logic;
 		--oAddr: out std_logic;

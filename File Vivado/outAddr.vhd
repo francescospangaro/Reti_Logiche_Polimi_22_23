@@ -34,9 +34,9 @@ use IEEE.NUMERIC_STD.ALL;
 entity outAddr is
 	port(
 		i_rst, i_clk: in std_logic;
-		i_en : in std_logic_vector(2 downto 0);
-		i_in1: in std_logic;
-		i_out1: out std_logic_vector(15 downto 0)
+		i_en 		: in std_logic_vector(2 downto 0);
+		i_in1		: in std_logic;
+		i_out1		: out std_logic_vector(15 downto 0)
 	);
 end outAddr;
 
