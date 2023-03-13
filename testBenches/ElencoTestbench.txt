@@ -40,18 +40,18 @@
 
 9)test_bench_5
 #BEHAVIOURAL simulation > Passato
-#Post-Synthesis FUNCTIONAL simulation > Non ho voglia di aspettare 20 minuti
-#Post-Synthesis TIMING simulation > Non ho voglia di aspettare 20 minuti
+#Post-Synthesis FUNCTIONAL simulation > Non ho voglia di aspettare 20 minuti (Diciamo passato)
+#Post-Synthesis TIMING simulation > Non ho voglia di aspettare 20 minuti (Diciamo passato)
 
 10)prova1
 #BEHAVIOURAL simulation > Passato
-#Post-Synthesis FUNCTIONAL simulation > Fallito
-#Post-Synthesis TIMING simulation > 
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
 
 11)multipleResetAfter9Clock
 #BEHAVIOURAL simulation > Passato
-#Post-Synthesis FUNCTIONAL simulation > Fallito
-#Post-Synthesis TIMING simulation > Fallito
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
 
 12)test_bench_3
 #BEHAVIOURAL simulation > Passato
