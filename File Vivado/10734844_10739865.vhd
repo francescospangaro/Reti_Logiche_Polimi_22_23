@@ -208,6 +208,7 @@ begin
                 o_z1 <= "00000000";
                 o_z2 <= "00000000";
                 o_z3 <= "00000000";
+	    	o_done <= '0';
             elsif rising_edge(i_clk) then
                 if(stateDefiner = "100") then
                     o_z0 <= 	temp_out0;
