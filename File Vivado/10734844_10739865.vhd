@@ -62,7 +62,7 @@ architecture Behavioral of project_reti_logiche is
     signal temp_new2 	: std_logic_vector(7 downto 0);
     signal temp_new3 	: std_logic_vector(7 downto 0);
     signal temp_data 	: std_logic_vector(7 downto 0);
-    signal counter 		: integer := 20;
+    signal counter 	: integer := 20;
     component deMuxMux is
         port(
             i_clk, i_rst: in std_logic;
