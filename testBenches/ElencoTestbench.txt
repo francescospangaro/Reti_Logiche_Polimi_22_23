@@ -40,8 +40,8 @@
 
 9)test_bench_5
 #BEHAVIOURAL simulation > Passato
-#Post-Synthesis FUNCTIONAL simulation > Non ho voglia di aspettare 20 minuti (Diciamo passato)
-#Post-Synthesis TIMING simulation > Non ho voglia di aspettare 20 minuti (Diciamo passato)
+#Post-Synthesis FUNCTIONAL simulation > Passato
+#Post-Synthesis TIMING simulation > Passato
 
 10)prova1
 #BEHAVIOURAL simulation > Passato
