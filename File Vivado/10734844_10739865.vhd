@@ -62,7 +62,6 @@ architecture Behavioral of project_reti_logiche is
     signal temp_new2 	: std_logic_vector(7 downto 0);
     signal temp_new3 	: std_logic_vector(7 downto 0);
     signal temp_data 	: std_logic_vector(7 downto 0);
-    signal counter 		: integer := 20;
     component deMuxMux is
         port(
             i_clk, i_rst: in std_logic;
@@ -225,3 +224,328 @@ begin
             end if;
     end process;
 end Behavioral;
+
+
+--ENTITY E ARCHITECTURE DELLA FSM
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity controller is
+	port(
+		i		: in std_logic;
+		i_clk	: in std_logic;
+		i_rst	: in std_logic;
+		outState: out std_logic_vector(2 downto 0)
+	);
+end controller;
+
+architecture FSM of controller is
+	--type state_type is (S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10);
+	type state_type is (S0, S1, S2, S3, S5, S6, S7, S9, S10);
+	signal next_state, current_state: state_type;
+
+	begin
+		state_reg: process(i_clk, i_rst)
+		begin
+			if(i_rst = '1') then
+				current_state <= S0;
+			elsif i_clk = '1' and i_clk'event then
+				current_state <= next_state;
+			end if;
+		end process;
+		
+		lambda: process(current_state, i)
+		begin
+			case current_state is
+				when S0 =>
+					if(i = '0') then
+						next_state <= S0;
+					else
+						next_state <= S1;
+					end if;
+				when S1 =>
+					if(i = '0') then
+						next_state <= S1;
+					else
+						next_state <= S2;
+					end if;
+				when S2 =>
+					if(i = '0') then
+						next_state <= S9;
+					else
+						next_state <= S3;
+					end if;
+				when S3 =>
+					if(i = '0') then
+						next_state <= S10;
+					else
+						next_state <= S3;
+					end if;
+				when S10 =>
+                    if(i = '0') then
+                        next_state <= S9;
+                    else
+                        next_state <= S10;
+                    end if;
+				when S9 =>
+                    if(i = '0') then
+                        next_state <= S5;
+                    else
+                        next_state <= S5;
+                    end if;
+				when S5 =>
+					if(i = '0') then
+						next_state <= S6;
+					else
+						next_state <= S6;
+					end if;
+				when S6 =>
+					if(i = '0') then
+						next_state <= S7;
+					else
+						next_state <= S7;
+					end if;
+				when S7 =>
+					if(i = '0') then
+						next_state <= S0;
+					else
+						next_state <= S1;
+					end if;
+			end case;
+		end process;
+		
+		delta: process(current_state)
+		begin
+			case current_state is
+				when S0 =>
+				    outState <= "000";
+				when S1 =>
+				    outState <= "001";
+				when S2 =>
+					outState <= "001";
+				when S3 =>
+					outState <= "010";
+				when S5 =>
+					outState <= "011";           
+				when S6 =>
+					outState <= "000";
+				when S7 =>
+				    outState <= "100";
+                 when S9 =>
+                    outState <= "011";
+                when S10 =>
+                    outState <= "010"; 
+			end case;
+		end process;
+	end FSM;
+	
+
+--ENTITY E ARCHITECTURE DelayFF
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity delayFF is
+    Port (
+        i_in1 	: in std_logic;
+        o_out1 	: out std_logic;
+        i_clk 	: in std_logic; 
+        i_rst 	: in std_logic
+     );
+end delayFF;
+
+architecture Behavioral of delayFF is
+begin
+	process(i_clk, i_rst)
+	begin
+	    if(i_rst = '1') then
+	       o_out1 <= '0';
+	    end if;
+        if(i_clk = '1' and i_clk'event) then
+            o_out1 <= i_in1;
+        end if;
+    end process;
+end Behavioral;
+
+
+--ENTITY E ARCHITECTURE OutReg
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity outReg is 
+	port(
+	    i_en		: in std_logic_vector(2 downto 0);
+		i_rst, i_clk: in std_logic;
+		i_w			: in std_logic;
+		i_out1		: out std_logic_vector(1 downto 0)
+	);
+ end outReg;
+
+ architecture Behavioral of outReg is
+     signal  ctr        : integer := 1;
+     signal  tempOut    : std_logic_vector(1 downto 0);
+ begin
+	process(i_clk, i_rst)
+	begin
+	   
+		if (i_rst = '1') then
+			i_out1 <= (others => '0');
+			ctr <= 1;
+			tempOut <= (others => '0');
+		end if;
+		if (i_clk = '1' and i_clk'event) then
+		  if not(i_en = "001") then
+		        i_out1 <= tempOut;
+	       elsif (i_en = "001" and ctr = 1) then
+                tempOut(ctr) <= i_w;
+                ctr <= ctr - 1;
+                i_out1 <= (others => '0');
+            elsif (i_en = "001" and ctr = 0) then
+                tempOut(ctr) <= i_w;
+                i_out1 <= tempOut;
+                ctr <= 1;
+        end if;
+      end if;
+	end process;
+ end Behavioral;
+ 
+ 
+ --ENTITY E ARCHITECTURE OutAddr
+ library IEEE;
+ use IEEE.STD_LOGIC_1164.ALL;
+ use IEEE.NUMERIC_STD.ALL;
+
+ entity outAddr is
+     port(
+         i_rst, i_clk: in std_logic;
+         i_en         : in std_logic_vector(2 downto 0);
+         i_in1        : in std_logic;
+         i_out1        : out std_logic_vector(15 downto 0)
+     );
+ end outAddr;
+ 
+ architecture Behavioral of outAddr is
+         signal tempAddr: std_logic_vector(15 downto 0);
+ begin
+     process(i_clk, i_rst)
+     begin
+         if i_rst = '1' then
+             tempAddr <= (others => '0');
+             i_out1 <= (others => '0');
+         end if;
+         if i_clk = '1' and i_clk'event then
+            if not (i_en = "010") then
+                 tempAddr <= (others => '0');
+                 i_out1 <= (others => '0');
+           elsif i_en = "010" then
+                 tempAddr <= std_logic_vector(shift_left(unsigned(tempAddr),1));
+                 tempAddr(0) <= i_in1;
+                 i_out1 <= tempAddr;
+           end if;
+         end if;
+     end process;
+ end Behavioral;
+ 
+ 
+ --ENTITY E ARCHITECTURE deMuxMux
+ library IEEE;
+ use IEEE.STD_LOGIC_1164.ALL;
+ use IEEE.NUMERIC_STD.ALL;
+ 
+ entity deMuxMux is
+     port(
+         i_clk, i_rst    : in std_logic;
+         i_en             : in std_logic_vector(2 downto 0);
+         i_mem_data        : in std_logic_vector(7 downto 0);
+         i_addr            : in std_logic_vector(1 downto 0);
+         i_out0            : out std_logic_vector(7 downto 0);
+         i_out1            : out std_logic_vector(7 downto 0);
+         i_out2            : out std_logic_vector(7 downto 0);
+         i_out3            : out std_logic_vector(7 downto 0);
+         
+         oldOut0            : in std_logic_vector(7 downto 0);
+         oldOut1            : in std_logic_vector(7 downto 0);
+         oldOut2            : in std_logic_vector(7 downto 0);
+         oldOut3            : in std_logic_vector(7 downto 0)
+     );
+  end deMuxMux;
+  
+  architecture Behavioral of deMuxMux is
+  begin
+     process(i_clk, i_rst)
+     begin
+         if(i_rst = '1')then
+             i_out0 <= (others => '0');
+             i_out1 <= (others => '0');
+             i_out2 <= (others => '0');
+             i_out3 <= (others => '0');
+         end if;
+         if(i_clk = '1' and i_clk'event)then
+            if i_en = "011" then
+               if(i_addr = "00")then
+                  i_out0 <= i_mem_data;
+                  i_out1 <= oldOut1;
+                  i_out2 <= oldOut2;
+                  i_out3 <= oldOut3;
+               elsif(i_addr = "01")then
+                  i_out1 <= i_mem_data;
+                  i_out0 <= oldOut0;
+                  i_out2 <= oldOut2;
+                  i_out3 <= oldOut3;
+               elsif(i_addr = "10")then
+                  i_out2 <= i_mem_data;
+                  i_out0 <= oldOut0;
+                  i_out1 <= oldOut1;
+                  i_out3 <= oldOut3;
+               elsif(i_addr = "11")then
+                  i_out3 <= i_mem_data;
+                  i_out0 <= oldOut0;
+                  i_out1 <= oldOut1;
+                  i_out2 <= oldOut2;
+               end if;
+           elsif not i_en = "011" then
+               i_out0 <= oldOut0;
+               i_out1 <= oldOut1;
+               i_out2 <= oldOut2;
+               i_out3 <= oldOut3;
+           end if;
+         end if;
+     end process;
+ end Behavioral;
+ 
+ 
+ --ENTITY E ARCHITECTURE Registry8Bit
+ library IEEE;
+ use IEEE.STD_LOGIC_1164.ALL;
+ use IEEE.NUMERIC_STD.ALL;
+ 
+ entity registry8bit is
+     port(
+         i_in1             : in std_logic_vector(7 downto 0);
+         i_clk, i_rst     : in std_logic;
+         i_out1             : out std_logic_vector(7 downto 0)
+     );
+ end registry8bit;
+ 
+ architecture Behavioral of registry8bit is
+     signal check : std_logic_vector(7 downto 0);
+     begin
+     process(i_clk, i_rst)
+         begin
+             if i_rst = '1' then
+                 i_out1 <= (others => '0');
+                 check <= (others => '0');
+             end if;
+             if (i_clk = '1' and i_clk'event) then
+                 if check = i_in1 then
+                     i_out1 <= i_in1;
+                     check <= i_in1;
+                 elsif not (check = i_in1) then
+                     i_out1 <= i_in1;
+                     check <= i_in1;    
+                 end if;
+             end if;
+     end process;
+ end behavioral;
