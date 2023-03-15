@@ -37,15 +37,12 @@ entity controller is
 		i_clk	: in std_logic;
 		i_rst	: in std_logic;
 		outState: out std_logic_vector(2 downto 0)
-		--oReg: out std_logic;
-		--oAddr: out std_logic;
-		--oMux: out std_logic;
-		--oDone: out std_logic
 	);
 end controller;
 
 architecture FSM of controller is
-	type state_type is (S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10);
+	--type state_type is (S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10);
+	type state_type is (S0, S1, S2, S3, S4, S5, S6, S7, S9, S10);
 	signal next_state, current_state: state_type;
 
 	begin
@@ -117,13 +114,7 @@ architecture FSM of controller is
 					end if;
 				when S7 =>
 					if(i = '0') then
-						next_state <= S8;
-					else
-						next_state <= S1;
-					end if;
-				when S8 =>
-					if(i = '0') then
-						next_state <= S8;
+						next_state <= S0;
 					else
 						next_state <= S1;
 					end if;
@@ -135,70 +126,24 @@ architecture FSM of controller is
 			case current_state is
 				when S0 =>
 				    outState <= "000";
-					--oReg <= '0';
-					--oAddr <= '0';
-					--oMux <= '0';
-					--oDone <= '0';
 				when S1 =>
 				    outState <= "001";
-					--oReg <= '1';
-                    --oAddr <= '0';
-                    --oMux <= '0';
-                    --oDone <= '0';
 				when S2 =>
 					outState <= "001";
-                    --oReg <= '1';
-                    --oAddr <= '0';
-                    --oMux <= '0';
-                    --oDone <= '0';
 				when S3 =>
-					outState <= "010";      
-					--oReg <= '0';
-                    --oAddr <= '1';
-                    --oMux <= '0';
-                    --oDone <= '0';
+					outState <= "010";
 				when S4 =>
 					outState <= "000";
-                    --oReg <= '0';
-                    --oAddr <= '0';
-                    --oMux <= '0';
-                    --oDone <= '0';
 				when S5 =>
-					outState <= "011";
-                    --oReg <= '0';
-                    --oAddr <= '0';
-                    --oMux <= '1';
-                    --oDone <= '0';            
+					outState <= "011";           
 				when S6 =>
 					outState <= "000";
-                    --oReg <= '0';
-                    --oAddr <= '0';
-                    --oMux <= '0';
-                    --oDone <= '0';
 				when S7 =>
 				    outState <= "100";
-                    --oReg <= '0';
-                    --oAddr <= '0';
-                    --oMux <= '0';
-                    --oDone <= '1';
-				when S8 =>
-					outState <= "000";
-                    --oReg <= '0';
-                    --oAddr <= '0';
-                    --oMux <= '0';
-                    --oDone <= '0';
                  when S9 =>
                     outState <= "011";
-                    --oReg <= '0';
-                    --oAddr <= '0';
-                    --oMux <= '1';
-                    --oDone <= '0';
                 when S10 =>
-                    outState <= "010";      
-                    --oReg <= '0';
-                    --oAddr <= '1';
-                    --oMux <= '0';
-                    --oDone <= '0';
+                    outState <= "010"; 
 			end case;
 		end process;
-	end FSM;
+	end FSM; 

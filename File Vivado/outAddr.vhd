@@ -57,9 +57,7 @@ begin
                 i_out1 <= (others => '0');
 		  elsif i_en = "010" then
 			    tempAddr <= std_logic_vector(shift_left(unsigned(tempAddr),1));
-                --report integer'image(to_integer(unsigned(tempAddr))) severity failure;
 			    tempAddr(0) <= i_in1;
-			    --report integer'image(to_integer(unsigned(tempAddr))) severity failure;
 			    i_out1 <= tempAddr;
 		  end if;
 		end if;

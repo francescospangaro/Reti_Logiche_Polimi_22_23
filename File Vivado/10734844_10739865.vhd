@@ -62,7 +62,7 @@ architecture Behavioral of project_reti_logiche is
     signal temp_new2 	: std_logic_vector(7 downto 0);
     signal temp_new3 	: std_logic_vector(7 downto 0);
     signal temp_data 	: std_logic_vector(7 downto 0);
-    signal counter 	: integer := 20;
+    signal counter 		: integer := 20;
     component deMuxMux is
         port(
             i_clk, i_rst: in std_logic;
@@ -194,7 +194,6 @@ begin
         );
     process(i_clk, i_rst)
         begin
---uncomment the lines if you want the memory enabling to be dynamic
             if rising_edge(i_clk) then
                 if(stateDefiner = "010" or stateDefiner = "001")then
                     o_mem_en <= '1';
@@ -208,7 +207,7 @@ begin
                 o_z1 <= "00000000";
                 o_z2 <= "00000000";
                 o_z3 <= "00000000";
-	    	o_done <= '0';
+                o_done <= 	'0';
             elsif rising_edge(i_clk) then
                 if(stateDefiner = "100") then
                     o_z0 <= 	temp_out0;
