@@ -1,7 +1,9 @@
 # Progetto di Reti Logiche
 
-Progetto di reti logiche, anno 2022/2023, prof Gianluca Palermo
-
+Progetto di reti logiche, anno 2022/2023, prof Gianluca Palermo  
+  
+30/30 cum laude   
+  
 Il progetto consiste nella descrizione e specifica di un componente hardware che  
 aspetta un segnale i_start alto per iniziare a leggere dall'ingresso i_w, allora inizierà  
 a leggere da i_w una stringa di bit lunga 1<x<19, i primi 2 bit indicano su quale delle 4  
